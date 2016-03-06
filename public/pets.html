@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <title>Pets overview</title>
+        <script src="jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+        <script src="pets.js"></script>
+        <link rel="stylesheet" type="text/css" href="pets.css" />
+    </head>
+    <body>
+        <div class="container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <span>Name</span>
+                        </th>
+                        <th>
+                            <span>Owner</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span>Kitty</span>
+                        </td>
+                        <td>
+                            <span></span>
+                        </td>
+                        <td>
+                            <button class="btn">Remove</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>Cat</span>
+                        </td>
+                        <td>
+                            <span>Mad Lady</span>
+                        </td>
+                        <td>
+                            <button class="btn">Remove</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn" onclick="goToRegister()">Register</button>
+            <button class="btn" onclick="goToModify()">Add new pet</button>
+        </div>
+    </body>
+</html>

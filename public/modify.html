@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <title>Modify pet</title>
+        <script src="jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+        <script src="modify.js"></script>
+        <link rel="stylesheet" type="text/css" href="modify.css" />
+    </head>
+    <body>
+        <div class="container">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>
+                        <span>Name</span>
+                    </td>
+                    <td>
+                        <input  class="form-control" type="text" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>Owner</span>
+                    </td>
+                    <td>
+                        <select  class="form-control">
+                            <option>Mad Lady</option>
+                            <option>John</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn" onclick="modify()">Save</button>
+        <div>
+    </body>
+</html>

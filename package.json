@@ -1,0 +1,33 @@
+{
+  "name": "server-side-javascript-course",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/csutorasa/Server-side-javascript-course.git"
+  },
+  "keywords": [
+    "node",
+    "javascript"
+  ],
+  "author": "Ármin Csutorás",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/csutorasa/Server-side-javascript-course/issues"
+  },
+  "homepage": "https://github.com/csutorasa/Server-side-javascript-course#readme",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "express": "^4.13.4",
+    "jquery": "^2.2.1"
+  }
+}
