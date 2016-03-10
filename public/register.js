@@ -1,3 +1,3 @@
 function register() {
-    window.location = 'pets.html';
+    window.location = 'login.html';
 }

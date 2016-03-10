@@ -8,7 +8,7 @@ app.use(express.static('public'));
 app.use(express.static('node_modules/bootstrap/dist'));
 app.use(express.static('node_modules/jquery/dist'));
 app.use('/', (req, res) => {
-    res.redirect('pets.html');
+    res.redirect('login.html');
 });
 
 app.listen(port);
