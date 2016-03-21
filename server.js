@@ -1,5 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 var middlewares = require('./middlewares/middlewares');
 
 const port = 80;
@@ -10,6 +11,11 @@ app.use(express.static('node_modules/bootstrap/dist'));
 app.use(express.static('node_modules/jquery/dist'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({
+  secret: 'petmanager',
+  resave: false,
+  saveUninitialized: true
+}));
 
 // Demo data 
 

@@ -9,6 +9,7 @@ exports.SavePet = SavePet;
 
 /**
  * Checks if user already exists.
+ * If username cannot be found in the request, does nothing.
  */
 function ExistUser(context) {
     return function(req, res, next) {
@@ -38,6 +39,7 @@ function GetUsers(context) {
 
 /**
  * Registers a user.
+ * If the username is already used or not all data is provided, replies with HTTP 400 error code.
  */
 function Register(context) {
     return function(req, res, next) {
@@ -62,7 +64,8 @@ function Register(context) {
 }
 
 /**
- * Creates session for user.
+ * Authenticates user and creates a session.
+ * If username or password is incorrect, replies with HTTP 401 error code.
  */
 function Login(context) {
     return function(req, res, next) {
@@ -73,7 +76,7 @@ function Login(context) {
             res.status(401).end('Invalid password!');
         }
         else {
-            // TODO create session
+            req.session.user = res.locals.user;
             res.end('');
         }
     }
@@ -84,7 +87,7 @@ function Login(context) {
  */
 function Logout(context) {
     return function(req, res, next) {
-        // TODO destory session
+        req.session.user = undefined;
         res.end('');
     }
 }
@@ -109,10 +112,12 @@ function GetPets(context) {
 
 /**
  * Deletes a pet. The user must be logged in.
+ * If pet ID is missing, replies with HTTP 400 error code.
+ * If user is not logged in, replies with HTTP 401 error code.
  */
 function DeletePet(context) {
     return function(req, res, next) {
-        var auth = true; // TODO add check for session
+        var auth = req.session.user ? true : false;
         if (auth) {
             if (!req.body.id) {
                 res.status(400).end('You must provide an id');
@@ -133,10 +138,12 @@ function DeletePet(context) {
 /**
  * Saves a pet. The user must be logged in.
  * If the pet already exists, it will be modified, if not then a new pet will be created.
+ * If any pet data is missing, replies with HTTP 400 error code.
+ * If user is not logged in, replies with HTTP 401 error code.
  */
 function SavePet(context) {
     return function(req, res, next) {
-        var auth = true; // TODO add check for session
+        var auth = req.session.user ? true : false;
         if (auth) {
             // TODO add or update
             res.end('');
@@ -144,7 +151,6 @@ function SavePet(context) {
         else {
             res.status(401).end('You must be logged in to delete a pet!');
         }
-        res.end('');
     }
 }
 
