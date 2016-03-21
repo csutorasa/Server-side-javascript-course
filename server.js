@@ -61,7 +61,8 @@ app.post('/deletepet',
 );
 
 app.post('/savepet',
-    middlewares.SavePet(context)
+    middlewares.UpdatePet(context),
+    middlewares.CreatePet(context)
 );
 
 app.use('/', (req, res, next) => {

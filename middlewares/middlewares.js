@@ -5,7 +5,8 @@ exports.Login = Login;
 exports.Logout = Logout;
 exports.GetPets = GetPets;
 exports.DeletePet = DeletePet;
-exports.SavePet = SavePet;
+exports.CreatePet = CreatePet;
+exports.UpdatePet = UpdatePet;
 
 /**
  * Checks if user already exists.
@@ -136,17 +137,49 @@ function DeletePet(context) {
 }
 
 /**
- * Saves a pet. The user must be logged in.
- * If the pet already exists, it will be modified, if not then a new pet will be created.
+ * Creates a pet. The user must be logged in.
  * If any pet data is missing, replies with HTTP 400 error code.
  * If user is not logged in, replies with HTTP 401 error code.
  */
-function SavePet(context) {
+function CreatePet(context) {
     return function(req, res, next) {
         var auth = req.session.user ? true : false;
         if (auth) {
-            // TODO add or update
-            res.end('');
+            if(req.body.name || req.body.name) {
+                context.pets.push({
+                    name: req.body.name,
+                    age: req.body.age
+                });
+                // TODO add owner
+                res.end('');
+            }
+            else {
+                res.status(400).end('All fields are required!');
+            }
+        }
+        else {
+            res.status(401).end('You must be logged in to delete a pet!');
+        }
+    }
+}
+
+/**
+ * Updates a pet. The user must be logged in.
+ * If id is missing, does nothing.
+ * If any pet data is missing, replies with HTTP 400 error code.
+ * If user is not logged in, replies with HTTP 401 error code.
+ */
+function UpdatePet(context) {
+    return function(req, res, next) {
+        var auth = req.session.user ? true : false;
+        if (auth) {
+            if(req.body.id) {
+                // TODO update
+                res.end('');
+            }
+            else {
+                next();
+            }
         }
         else {
             res.status(401).end('You must be logged in to delete a pet!');
