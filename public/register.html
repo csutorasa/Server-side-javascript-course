@@ -2,10 +2,9 @@
     <head>
         <title>Register</title>
         <script src="jquery.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
         <script src="register.js"></script>
-        <link rel="stylesheet" type="text/css" href="register.css" />
+        <link rel="stylesheet" type="text/css" href="main.css" />
     </head>
     <body>
         <div class="container">
@@ -16,7 +15,7 @@
                             <span>Username</span>
                         </td>
                         <td>
-                            <input  class="form-control" type="text" />
+                            <input id="user" class="form-control" type="text" />
                         </td>
                     </tr>
                     <tr>
@@ -24,7 +23,7 @@
                             <span>Password</span>
                         </td>
                         <td>
-                            <input  class="form-control" type="password" />
+                            <input id="pass" class="form-control" type="password" />
                         </td>
                     </tr>
                     <tr>
@@ -32,12 +31,13 @@
                             <span>Name</span>
                         </td>
                         <td>
-                            <input  class="form-control" type="text" />
+                            <input id="name" class="form-control" type="text" />
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <button class="btn" onclick="register()">Register</button>
+            <div id="errors"></div>
+            <button class="btn btn-primary" onclick="register()">Register</button>
         </div>
     </body>
 </html>

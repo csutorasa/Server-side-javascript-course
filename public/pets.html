@@ -2,10 +2,9 @@
     <head>
         <title>Pets overview</title>
         <script src="jquery.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
         <script src="pets.js"></script>
-        <link rel="stylesheet" type="text/css" href="pets.css" />
+        <link rel="stylesheet" type="text/css" href="main.css" />
     </head>
     <body>
         <div class="container">
@@ -23,39 +22,15 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <span>Kitty</span>
-                        </td>
-                        <td>
-                            <span>3</span>
-                        </td>
-                        <td>
-                            <span></span>
-                        </td>
-                        <td>
-                            <button class="btn">Remove</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span>Cat</span>
-                        </td>
-                        <td>
-                            <span>2</span>
-                        </td>
-                        <td>
-                            <span>Mad Lady</span>
-                        </td>
-                        <td>
-                            <button class="btn">Remove</button>
-                        </td>
-                    </tr>
+                <tbody id="pets">
+                    
                 </tbody>
             </table>
-            <button class="btn" onclick="goToModify()">Add new pet</button>
-            <button class="btn" onclick="logout()">Logout</button>
+            <div id="errors"></div>
+            <div class="buttons">
+                <button class="btn btn-primary" onclick="goToModify()">Add new pet</button>
+                <button class="btn" onclick="logout()">Logout</button>
+            </div>
         </div>
     </body>
 </html>

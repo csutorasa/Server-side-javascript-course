@@ -2,10 +2,9 @@
     <head>
         <title>Modify pet</title>
         <script src="jquery.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
         <script src="modify.js"></script>
-        <link rel="stylesheet" type="text/css" href="modify.css" />
+        <link rel="stylesheet" type="text/css" href="main.css" />
     </head>
     <body>
         <div class="container">
@@ -16,7 +15,7 @@
                             <span>Name</span>
                         </td>
                         <td>
-                            <input  class="form-control" type="text" />
+                            <input id="name" class="form-control" type="text" />
                         </td>
                     </tr>
                     <tr>
@@ -24,7 +23,7 @@
                             <span>Owner</span>
                         </td>
                         <td>
-                            <select  class="form-control">
+                            <select id="owner" class="form-control">
                                 <option>Mad Lady</option>
                                 <option>John</option>
                             </select>
@@ -32,7 +31,9 @@
                     </tr>
                 </tbody>
             </table>
-            <button class="btn" onclick="modify()">Save</button>
+            <div class="buttons">
+                <button class="btn btn-primary" onclick="modify()">Save</button>
+            </div>
         <div>
     </body>
 </html>

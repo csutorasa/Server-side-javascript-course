@@ -26,6 +26,7 @@
   "homepage": "https://github.com/csutorasa/Server-side-javascript-course#readme",
   "private": true,
   "dependencies": {
+    "body-parser": "^1.15.0",
     "bootstrap": "^3.3.6",
     "express": "^4.13.4",
     "jquery": "^2.2.1"

@@ -1,0 +1,23 @@
+tbody tr {
+    -webkit-transition: background-color 1s;
+    -moz-transition: background-color 1s;
+    transition: background-color 1s;
+}
+
+tbody tr:hover {
+    background-color: #eee;
+}
+
+tbody tr td:last-child {
+    text-align: right;
+}
+
+.buttons .btn {
+    font-size: 120%;
+}
+
+#errors {
+    font-size: 150%;
+    color: red;
+    padding-bottom: 10px;
+}
