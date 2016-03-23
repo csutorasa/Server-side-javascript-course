@@ -12,7 +12,7 @@ tbody tr td:last-child {
     text-align: right;
 }
 
-.buttons .btn {
+.buttons .btn, input[type="submit"] {
     font-size: 120%;
 }
 

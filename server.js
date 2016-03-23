@@ -1,21 +1,9 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var middlewares = require('./middlewares/middlewares');
 
 const port = 80;
 
-var app = express();
-app.use(express.static('public'));
-app.use(express.static('node_modules/bootstrap/dist'));
-app.use(express.static('node_modules/jquery/dist'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({
-  secret: 'petmanager',
-  resave: false,
-  saveUninitialized: true
-}));
 
 // Demo data 
 
@@ -29,45 +17,24 @@ var pets = [
 ];
 var context = {
     users: users,
-    pets: pets
+    pets: pets,
+    publicRoot: __dirname + '/public'
 };
 
-// Routes
+var app = express();
+app.use('/public', express.static(__dirname + '/public'));
+app.use(express.static('node_modules/bootstrap/dist'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({
+    secret: 'petmanager',
+    resave: false,
+    saveUninitialized: true
+}));
+require('./routes/pets')(app, context);
+require('./routes/users')(app, context);
 
-app.post('/loginuser',
-    middlewares.ExistUser(context),
-    middlewares.Login(context)
-);
-
-app.post('/logoutuser',
-    middlewares.Logout(context)
-);
-
-app.post('/registeruser',
-    middlewares.ExistUser(context),
-    middlewares.Register(context)
-);
-
-app.get('/getpets',
-    middlewares.GetPets(context)
-);
-
-app.get('/getusers',
-    middlewares.GetUsers(context)
-);
-
-app.post('/deletepet',
-    middlewares.DeletePet(context)
-);
-
-app.post('/savepet',
-    middlewares.UpdatePet(context),
-    middlewares.CreatePet(context)
-);
-
-app.use('/', (req, res, next) => {
-    res.redirect('login.html');
-});
+//app.use('/', middlewares.Redirect(context) );
 
 // Server start
 

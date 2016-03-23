@@ -1,46 +1,46 @@
 <html>
     <head>
         <title>Modify pet</title>
-        <script src="jquery.min.js"></script>
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-        <script src="modify.js"></script>
         <link rel="stylesheet" type="text/css" href="main.css" />
     </head>
     <body>
         <div class="container">
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <td>
-                            <span>Name</span>
-                        </td>
-                        <td>
-                            <input id="name" class="form-control" type="text" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span>Age</span>
-                        </td>
-                        <td>
-                            <input id="age" class="form-control" type="number" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span>Owner</span>
-                        </td>
-                        <td>
-                            <select id="owner" class="form-control">
-                                
-                            </select>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="buttons">
-                <button class="btn btn-primary" onclick="modify()">Save</button>
-            </div>
+            <form method="POST" action="">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span>Name</span>
+                            </td>
+                            <td>
+                                <input name="name" class="form-control" type="text" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span>Age</span>
+                            </td>
+                            <td>
+                                <input name="age" class="form-control" type="number" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span>Owner</span>
+                            </td>
+                            <td>
+                                <select name="owner" class="form-control">
+                                    
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="buttons">
+                    <input class="btn btn-primary" type="submit" value="Save" />
+                </div>
+            </form>
         <div>
     </body>
 </html>
