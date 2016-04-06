@@ -8,7 +8,7 @@ function addRoutes(app, context) {
         others.Render(context)
     );
 
-    app.use('/modify',
+    app.use('/modify/:id',
         others.Redirect(context),
         users.GetUsers(context),
         pets.GetPetId(context),
@@ -16,7 +16,7 @@ function addRoutes(app, context) {
         others.Render(context)
     );
 
-    app.use('/deletepet',
+    app.use('/delete/:id',
         others.Redirect(context),
         pets.DeletePet(context)
     );

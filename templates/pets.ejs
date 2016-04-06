@@ -1,0 +1,59 @@
+<% include header %>
+<h2>Welcome
+    <% if(typeof session.user === 'undefined') { %>
+        guest!
+    <% } else { %>
+        <%= session.user.name %>!
+    <% } %>
+</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <span>Name</span>
+            </th>
+            <th>
+                <span>Age</span>
+            </th>
+            <th>
+                <span>Owner</span>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <% data.forEach(function(pet){ %>
+            <tr>
+                <td>
+                    <span>
+                        <% if(typeof session.user === 'undefined') { %>
+                            <%= pet.name %>
+                        <% } else { %>
+                            <a href="/modify/<%= pet.id %>"><%= pet.name %></a>
+                        <% } %>
+                    </span>
+                </td>
+                <td>
+                    <span><%= pet.age %></span>
+                </td>
+                <td>
+                    <span><%= pet.owner %></span>
+                </td>
+                <td>
+                    <% if(typeof session.user !== 'undefined') { %>
+                        <a href="/delete/<%= pet.id %>"><button class="btn">Delete</button></a>
+                    <% } %>
+                </td>
+            </tr>
+        <% }); %>
+    </tbody>
+</table>            
+<div class="buttons">
+    <% if(typeof session.user === 'undefined') { %>
+        <a href="login"><button class="btn btn-primary">Login</button></a>
+    <% } else { %>
+        <a href="/modify/0"><button class="btn btn-primary">Add new pet</button></a>
+        <a href="/login"><button class="btn">Logout</button></a>
+    <% } %>
+</div>
+<% include footer %>

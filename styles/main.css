@@ -16,7 +16,7 @@ tbody tr td:last-child {
     font-size: 120%;
 }
 
-#errors {
+.error {
     font-size: 150%;
     color: red;
     padding-bottom: 10px;

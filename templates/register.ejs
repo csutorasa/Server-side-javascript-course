@@ -1,0 +1,41 @@
+<% include header %>
+<form method="POST" action="">
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>
+                    <span>Username</span>
+                </td>
+                <td>
+                    <input name="username" class="form-control" type="text" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Password</span>
+                </td>
+                <td>
+                    <input name="password" class="form-control" type="password" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Name</span>
+                </td>
+                <td>
+                    <input name="name" class="form-control" type="text" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <% if(typeof error !== 'undefined') { %>
+        <span class="error"><%= error %></span>
+    <% } %>
+    <div class="buttons">
+        <input class="btn btn-primary" type="submit" value="Register" />
+    </div>
+</form>
+<div class="buttons">
+    <a href="/login"><button class="btn">Login</button></a>
+</div>
+<% include footer %>

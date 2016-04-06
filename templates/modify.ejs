@@ -1,0 +1,46 @@
+<% include header %>
+<form method="POST" action="">
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>
+                    <span>Name</span>
+                </td>
+                <td>
+                    <input name="name" class="form-control" type="text" value="<%= typeof pet === 'undefined' ? '' : pet.name %>"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Age</span>
+                </td>
+                <td>
+                    <input name="age" class="form-control" type="number" value="<%= typeof pet === 'undefined' ? '' : pet.age %>"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Owner</span>
+                </td>
+                <td>
+                    <select name="owner" class="form-control">
+                        <option></option>
+                        <% data.forEach(function(username){ %>
+                            <option <%= typeof pet !== 'undefined' && typeof pet.owner !== 'undefined' && pet.owner.name === username ? 'selected="selected"' : '' %>><%= username %></option>
+                        <% }); %>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <% if(typeof error !== 'undefined') { %>
+        <span class="error"><%= error %></span>
+    <% } %>
+    <div class="buttons">
+        <input class="btn btn-primary" type="submit" value="Save" />
+    </div>
+</form>
+<div class="buttons">
+    <a href="/pets"><button class="btn">Cancel</button></a>
+</div>
+<% include footer %>

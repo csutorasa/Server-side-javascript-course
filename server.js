@@ -1,29 +1,30 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var otherMiddlewares = require('./middlewares/others');
 
 const port = 80;
-
 
 // Demo data 
 
 var users = [
-    { id: 0, user: 'mad', pass: 'lady', name: 'Mad Lady' },
-    { id: 1, user: 'john', pass: 'pass', name: 'John' }
+    { id: 1, user: 'mad', pass: 'lady', name: 'Mad Lady' },
+    { id: 2, user: 'john', pass: 'pass', name: 'John' }
 ];
 var pets = [
-    { id: 0, name: 'Kitty', age: 3, },
-    { id: 1, name: 'Cat', age: 2, owner: users[0] }
+    { id: 1, name: 'Kitty', age: 3, },
+    { id: 2, name: 'Cat', age: 2, owner: users[0] }
 ];
 var context = {
     users: users,
     pets: pets,
-    publicRoot: __dirname + '/public'
+    templatesDir: __dirname + '/templates'
 };
 
 var app = express();
-app.use('/public', express.static(__dirname + '/public'));
-app.use(express.static('node_modules/bootstrap/dist'));
+app.set('view engine', 'ejs');
+app.use('/styles', express.static(__dirname + '/styles'));
+app.use('/bootstrap', express.static('node_modules/bootstrap/dist'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
@@ -31,10 +32,10 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
+app.use(function (req, res, next) { res.template = {}; next(); });
 require('./routes/pets')(app, context);
 require('./routes/users')(app, context);
-
-//app.use('/', middlewares.Redirect(context) );
+app.use('/', otherMiddlewares.Redirect(context));
 
 // Server start
 

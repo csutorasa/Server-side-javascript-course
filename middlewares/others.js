@@ -7,7 +7,7 @@ exports.Render = Render;
 function Redirect(context) {
     return function(req, res, next) {
         if (!req.session.user && req.baseUrl !== '/login') {
-            res.redirect('login');
+            return res.redirect('/login');
         }
         else {
             return next();
@@ -21,13 +21,8 @@ function Redirect(context) {
  */
 function Render(context) {
     return function(req, res, next) {
-        if(typeof res.template.error !== 'undefined') {
-            console.log('Available error:', res.template.error);
-        }
-        if(typeof res.template.data !== 'undefined') {
-            console.log('Available data:', res.template.data);
-        }
-        res.sendFile(context.publicRoot + res.template.url);
+        res.template.session = req.session;
+        res.render(context.templatesDir + res.templateUrl, res.template);
     }
 }
 

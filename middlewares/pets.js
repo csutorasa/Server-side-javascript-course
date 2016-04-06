@@ -17,7 +17,9 @@ function GetPets(context) {
                 owner: typeof context.pets[i].owner === 'undefined' ? '' : context.pets[i].owner.name
             });
         }
-        res.template = { url: '/pets.html', data: pets };
+        res.templateUrl = '/pets.ejs';
+        res.template.title = 'Pets';
+        res.template.data = pets;
         return next();
     }
 }
@@ -31,14 +33,15 @@ function DeletePet(context) {
     return function(req, res, next) {
         var auth = req.session.user ? true : false;
         if (auth) {
-            if (req.body.id) {
-                for (var i = 0; i < context.pets.length; i++)
-                    if (context.pets[i].id == req.body.id) {
+            if (req.params.id) {
+                for (var i = 0; i < context.pets.length; i++) {
+                    if (context.pets[i].id == req.params.id) {
                         context.pets.splice(i, 1);
                     }
+                }
             }
         }
-        res.redirect('pets');
+        return res.redirect('/pets');
     }
 }
 
@@ -49,13 +52,14 @@ function DeletePet(context) {
  */
 function GetPetId(context) {
     return function(req, res, next) {
-        if (req.body.id) {
+        if (req.params.id) {
             for (var i = 0; i < context.pets.length; i++) {
-                if (context.pets[i].id == req.body.id) {
+                if (context.pets[i].id == req.params.id) {
                     res.locals.pet = context.pets[i];
                     break;
                 }
             }
+            res.template.pet = res.locals.pet;
         }
         return next();
     }
@@ -70,10 +74,31 @@ function GetPetId(context) {
 function SavePet(context) {
     return function(req, res, next) {
         if (req.body.name || req.body.age || req.body.owner) {
-            // TODO create or update
-            res.redirect('pets');
+            if(req.body.name && req.body.age) {
+                if(res.locals.pet) {
+                    res.locals.pet.name = req.body.name;
+                    res.locals.pet.age = req.body.age;
+                    res.locals.pet.owner =  req.body.owner ? { name: req.body.owner } : undefined;
+                }
+                else {
+                    context.pets.push({
+                        id: Math.floor((Math.random() * 10000000) + 1),
+                        name: req.body.name,
+                        age: req.body.age,
+                        owner: req.body.owner ? { name: req.body.owner } : undefined
+                    });
+                }
+                return res.redirect('/pets');
+            }
+            else {
+                res.templateUrl = '/modify.ejs';
+                res.template.title = 'Modify';
+                res.template.error = 'Fill the entire form!';
+                return next();
+            }
         }
-        res.template.url = '/modify.html';
+        res.templateUrl = '/modify.ejs';
+        res.template.title = 'Modify';
         return next();
     }
 }

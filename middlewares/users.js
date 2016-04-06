@@ -10,7 +10,6 @@ exports.Logout = Logout;
  */
 function ExistUser(context) {
     return function(req, res, next) {
-        res.template = {};
         if (req.body.username) {
             for (var i = 0; i < context.users.length; i++) {
                 if (context.users[i].user === req.body.username) {
@@ -18,7 +17,8 @@ function ExistUser(context) {
                 }
             }
             if (typeof res.locals.user === 'undefined') {
-                res.template.url = '/login.html';
+                res.templateUrl = '/login.ejs';
+                res.template.title = 'Login';
                 res.template.error = 'Invalid username!';
             }
         }
@@ -35,7 +35,7 @@ function GetUsers(context) {
         for (var i = 0; i < context.users.length; i++) {
             names.push(context.users[i].name);
         }
-        res.template = { data: names };
+        res.template.data = names;
         return next();
     }
 }
@@ -46,23 +46,32 @@ function GetUsers(context) {
  */
 function Register(context) {
     return function(req, res, next) {
-        res.template = {};
         if (typeof res.locals.user !== 'undefined') {
-            res.template.url = '/register.html';
+            res.templateUrl = '/register.ejs';
+            res.template.title = 'Register';
             res.template.error = 'Username is already taken!';
             return next();
         }
-        if (req.body.username && req.body.password && req.body.name) {
-            var newuser = {
-                user: req.body.username,
-                pass: req.body.password,
-                name: req.body.name
+        if (req.body.username || req.body.password || req.body.name) {
+            if (req.body.username && req.body.password && req.body.name) {
+                var newuser = {
+                    user: req.body.username,
+                    pass: req.body.password,
+                    name: req.body.name
+                }
+                context.users.push(newuser);
+                return res.redirect('/login');
             }
-            context.users.push(newuser);
-            res.redirect('login');
+            else {
+                res.templateUrl = '/register.ejs';
+                res.template.title = 'Register';
+                res.template.error = 'Fill the entire form!';
+                return next();
+            }
         }
-
-        res.template.url = '/register.html';
+        res.templateUrl = '/register.ejs';
+        res.template.title = 'Register';
+        res.template.error = undefined;
         return next();
     }
 }
@@ -75,18 +84,18 @@ function Login(context) {
     return function(req, res, next) {
         if (typeof res.locals.user !== 'undefined') {
             if (typeof req.body.password === 'undefined' || res.locals.user.pass !== req.body.password) {
-                res.template = {
-                    url: '/login.html',
-                    error: 'Invalid password!'
-                };
+                res.templateUrl = '/login.ejs';
+                res.template.title = 'Login';
+                res.template.error = 'Invalid password!';
                 return next();
             }
             else {
                 req.session.user = res.locals.user;
-                res.redirect('pets');
+                return res.redirect('/pets');
             }
         }
-        res.template.url = '/login.html';
+        res.templateUrl = '/login.ejs';
+        res.template.title = 'Login';
         return next();
     }
 }
