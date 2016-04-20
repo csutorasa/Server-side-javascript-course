@@ -7,20 +7,15 @@ exports.SavePet = SavePet;
  * Gets all pets.
  */
 function GetPets(context) {
-    return function(req, res, next) {
-        var pets = [];
-        for (var i = 0; i < context.pets.length; i++) {
-            pets.push({
-                id: context.pets[i].id,
-                name: context.pets[i].name,
-                age: context.pets[i].age,
-                owner: typeof context.pets[i].owner === 'undefined' ? '' : context.pets[i].owner.name
-            });
-        }
-        res.templateUrl = '/pets.ejs';
-        res.template.title = 'Pets';
-        res.template.data = pets;
-        return next();
+    var petModel = context.petModel;
+    return function (req, res, next) {
+        petModel.find({}).populate('owner').exec(function (err, result) {
+            if (err) console.log('Error');
+            res.templateUrl = '/pets.ejs';
+            res.template.title = 'Pets';
+            res.template.data = result;
+            return next();
+        });
     }
 }
 
@@ -30,18 +25,20 @@ function GetPets(context) {
  * If user is not logged in, replies with HTTP 401 error code.
  */
 function DeletePet(context) {
-    return function(req, res, next) {
+    var petModel = context.petModel;
+    return function (req, res, next) {
         var auth = req.session.user ? true : false;
         if (auth) {
             if (req.params.id) {
-                for (var i = 0; i < context.pets.length; i++) {
-                    if (context.pets[i].id == req.params.id) {
-                        context.pets.splice(i, 1);
-                    }
-                }
+                petModel.remove({ _id: req.params.id }, function (err, result) {
+                    if (err) console.log('Error');
+                    return res.redirect('/pets');
+                });
             }
         }
-        return res.redirect('/pets');
+        else {
+            return res.redirect('/pets');
+        }
     }
 }
 
@@ -51,17 +48,19 @@ function DeletePet(context) {
  * If user is not logged in, replies with HTTP 401 error code.
  */
 function GetPetId(context) {
-    return function(req, res, next) {
+    var petModel = context.petModel;
+    return function (req, res, next) {
         if (req.params.id) {
-            for (var i = 0; i < context.pets.length; i++) {
-                if (context.pets[i].id == req.params.id) {
-                    res.locals.pet = context.pets[i];
-                    break;
-                }
-            }
-            res.template.pet = res.locals.pet;
+            petModel.findOne({ _id: req.params.id }).populate('owner').exec(function (err, pet) {
+                if (err) console.log('Error');
+                res.locals.pet = pet != null ? pet : undefined;
+                res.template.pet = res.locals.pet;
+                return next();
+            })
         }
-        return next();
+        else {
+            return next();
+        }
     }
 }
 
@@ -72,23 +71,31 @@ function GetPetId(context) {
  * If user is not logged in, replies with HTTP 401 error code.
  */
 function SavePet(context) {
-    return function(req, res, next) {
+    var petModel = context.petModel;
+    return function (req, res, next) {
         if (req.body.name || req.body.age || req.body.owner) {
-            if(req.body.name && req.body.age) {
-                if(res.locals.pet) {
-                    res.locals.pet.name = req.body.name;
-                    res.locals.pet.age = req.body.age;
-                    res.locals.pet.owner =  req.body.owner ? { name: req.body.owner } : undefined;
-                }
-                else {
-                    context.pets.push({
-                        id: Math.floor((Math.random() * 10000000) + 1),
-                        name: req.body.name,
-                        age: req.body.age,
-                        owner: req.body.owner ? { name: req.body.owner } : undefined
+            if (req.body.name && req.body.age) {
+                if (res.locals.pet) {
+                    var pet = res.locals.pet;
+                    pet.name = req.body.name;
+                    pet.age = req.body.age;
+                    pet.owner = req.body.owner ? req.body.owner : undefined;
+                    res.locals.pet.save(function(err, pet) {
+                        if(err) console.log('Error');
+                        return res.redirect('/pets');
                     });
                 }
-                return res.redirect('/pets');
+                else {
+                    var newpet = new petModel({
+                        name: req.body.name,
+                        age: req.body.age,
+                        owner: req.body.owner ? req.body.owner : undefined
+                    });
+                    newpet.save(function (err, pet) {
+                        if (err) console.log('Error');
+                        return res.redirect('/pets');
+                    });
+                }
             }
             else {
                 res.templateUrl = '/modify.ejs';
@@ -97,8 +104,10 @@ function SavePet(context) {
                 return next();
             }
         }
-        res.templateUrl = '/modify.ejs';
-        res.template.title = 'Modify';
-        return next();
+        else {
+            res.templateUrl = '/modify.ejs';
+            res.template.title = 'Modify';
+            return next();
+        }
     }
 }

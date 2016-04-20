@@ -1,23 +1,15 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var mongoose = require('mongoose');
 var otherMiddlewares = require('./middlewares/others');
 
 const port = 80;
+const connectionstring = 'mongodb://localhost:27017/GS3778';
 
-// Demo data 
-
-var users = [
-    { id: 1, user: 'mad', pass: 'lady', name: 'Mad Lady' },
-    { id: 2, user: 'john', pass: 'pass', name: 'John' }
-];
-var pets = [
-    { id: 1, name: 'Kitty', age: 3, },
-    { id: 2, name: 'Cat', age: 2, owner: users[0] }
-];
 var context = {
-    users: users,
-    pets: pets,
+    userModel: require('./models/userModel'),
+    petModel: require('./models/petModel'),
     templatesDir: __dirname + '/templates'
 };
 
@@ -37,7 +29,24 @@ require('./routes/pets')(app, context);
 require('./routes/users')(app, context);
 app.use('/', otherMiddlewares.Redirect(context));
 
-// Server start
+// Server started
 
-app.listen(port);
-console.log('Server started on http://localhost:' + port + '/');
+app.listen(port, function (err) {
+    if (err) {
+        console.log('Failed to start the webserver on: ' + connectionstring);
+        process.exit(1);
+    }
+    else {
+        console.log('Webserver started on http://localhost:' + port + '/');
+    }
+});
+mongoose.connect(connectionstring, function (err) {
+    if (err) {
+        console.log('Failed to connect to database on: ' + connectionstring);
+        process.exit(1);
+    }
+    else {
+        console.log('Connected to database on: ' + connectionstring);
+    }
+});
+

@@ -37,7 +37,7 @@
                     <span><%= pet.age %></span>
                 </td>
                 <td>
-                    <span><%= pet.owner %></span>
+                    <span><%= pet.owner != null && pet.owner.name ? pet.owner.name : '' %></span>
                 </td>
                 <td>
                     <% if(typeof session.user !== 'undefined') { %>

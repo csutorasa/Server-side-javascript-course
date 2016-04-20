@@ -9,20 +9,23 @@ exports.Logout = Logout;
  * If username cannot be found in the request, does nothing.
  */
 function ExistUser(context) {
-    return function(req, res, next) {
+    var userModel = context.userModel;
+    return function (req, res, next) {
         if (req.body.username) {
-            for (var i = 0; i < context.users.length; i++) {
-                if (context.users[i].user === req.body.username) {
-                    res.locals.user = context.users[i];
+            userModel.findOne({ user: req.body.username }, function (err, user) {
+                if (err) console.log('Error');
+                res.locals.user = user != null ? user : undefined;
+                if (typeof res.locals.user === 'undefined') {
+                    res.templateUrl = '/login.ejs';
+                    res.template.title = 'Login';
+                    res.template.error = 'Invalid username!';
                 }
-            }
-            if (typeof res.locals.user === 'undefined') {
-                res.templateUrl = '/login.ejs';
-                res.template.title = 'Login';
-                res.template.error = 'Invalid username!';
-            }
+                return next();
+            });
         }
-        return next();
+        else {
+            return next();
+        }
     }
 }
 
@@ -30,13 +33,13 @@ function ExistUser(context) {
  * Gets name of all users.
  */
 function GetUsers(context) {
-    return function(req, res, next) {
-        var names = [];
-        for (var i = 0; i < context.users.length; i++) {
-            names.push(context.users[i].name);
-        }
-        res.template.data = names;
-        return next();
+    var userModel = context.userModel;
+    return function (req, res, next) {
+        userModel.find({}).select('name').exec(function (err, users) {
+            if (err) console.log('Error');
+            res.template.data = users;
+            return next();
+        });
     }
 }
 
@@ -45,7 +48,8 @@ function GetUsers(context) {
  * If the username is already used or not all data is provided, replies with HTTP 400 error code.
  */
 function Register(context) {
-    return function(req, res, next) {
+    var userModel = context.userModel;
+    return function (req, res, next) {
         if (typeof res.locals.user !== 'undefined') {
             res.templateUrl = '/register.ejs';
             res.template.title = 'Register';
@@ -54,13 +58,15 @@ function Register(context) {
         }
         if (req.body.username || req.body.password || req.body.name) {
             if (req.body.username && req.body.password && req.body.name) {
-                var newuser = {
+                var newuser = new userModel({
                     user: req.body.username,
                     pass: req.body.password,
                     name: req.body.name
-                }
-                context.users.push(newuser);
-                return res.redirect('/login');
+                });
+                newuser.save(function (err, user) {
+                    if (err) console.log('Error');
+                    return res.redirect('/login');
+                });
             }
             else {
                 res.templateUrl = '/register.ejs';
@@ -69,10 +75,12 @@ function Register(context) {
                 return next();
             }
         }
-        res.templateUrl = '/register.ejs';
-        res.template.title = 'Register';
-        res.template.error = undefined;
-        return next();
+        else {
+            res.templateUrl = '/register.ejs';
+            res.template.title = 'Register';
+            res.template.error = undefined;
+            return next();
+        }
     }
 }
 
@@ -81,7 +89,7 @@ function Register(context) {
  * If username or password is incorrect, replies with HTTP 401 error code.
  */
 function Login(context) {
-    return function(req, res, next) {
+    return function (req, res, next) {
         if (typeof res.locals.user !== 'undefined') {
             if (typeof req.body.password === 'undefined' || res.locals.user.pass !== req.body.password) {
                 res.templateUrl = '/login.ejs';
@@ -94,9 +102,11 @@ function Login(context) {
                 return res.redirect('/pets');
             }
         }
-        res.templateUrl = '/login.ejs';
-        res.template.title = 'Login';
-        return next();
+        else {
+            res.templateUrl = '/login.ejs';
+            res.template.title = 'Login';
+            return next();
+        }
     }
 }
 
@@ -104,7 +114,7 @@ function Login(context) {
  * Destroys user session.
  */
 function Logout(context) {
-    return function(req, res, next) {
+    return function (req, res, next) {
         req.session.user = undefined;
         return next();
     }

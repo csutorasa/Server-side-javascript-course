@@ -24,9 +24,12 @@
                 </td>
                 <td>
                     <select name="owner" class="form-control">
-                        <option></option>
-                        <% data.forEach(function(username){ %>
-                            <option <%= typeof pet !== 'undefined' && typeof pet.owner !== 'undefined' && pet.owner.name === username ? 'selected="selected"' : '' %>><%= username %></option>
+                        <option value=""></option>
+                        <% data.forEach(function(user){ %>
+                            <option <%= typeof pet !== 'undefined' && typeof pet.owner !== 'undefined' && pet.owner._id.toString() == user._id.toString() ? 'selected' : '' %>
+                                value="<%= user._id %>">
+                                <%= user.name %>
+                            </option>
                         <% }); %>
                     </select>
                 </td>
